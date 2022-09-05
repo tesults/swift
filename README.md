@@ -1,4 +1,4 @@
-# tesults
+# tesults-swift
 
 Report test results data with Tesults (https://www.tesults.com) from tests written in the Swift programming language.
 
