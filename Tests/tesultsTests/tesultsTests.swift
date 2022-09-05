@@ -18,9 +18,9 @@ final class tesultsTests: XCTestCase {
         testCase1["reason"] = "Failure reason"
         testCase1["params"] = ["Param 1" : "Param 1 Value", "Param 2" : "Param 2 Value"]
         if (includeFiles) {
-            testCase1["files"] = ["/Users/admin/Library/Mobile Documents/com~apple~CloudDocs/Ajeet/Documents/tr/test-files/logs/log1.txt",
-            "/Users/admin/Library/Mobile Documents/com~apple~CloudDocs/Ajeet/Documents/tr/test-files/logs/log2.txt",
-          "/Users/admin/Library/Mobile Documents/com~apple~CloudDocs/Ajeet/Documents/tr/test-files/images/bali/bali-best/bali18.jpg"]
+            testCase1["files"] = ["/test-files/logs/log1.txt",
+            "/test-files/logs/log2.txt",
+          "/test-files/images/screenshot.jpg"]
         }
         testCase1["steps"] = [
             [
