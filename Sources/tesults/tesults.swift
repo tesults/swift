@@ -334,4 +334,6 @@ public struct Tesults {
         }
         return resultsResponse!
     }
+    
+    public init () {}
 }
