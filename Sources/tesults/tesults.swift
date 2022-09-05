@@ -204,10 +204,10 @@ public struct Tesults {
     }
     
     public struct ResultsResponse {
-        let success: Bool
-        let message: String
-        let warnings: [String]
-        let errors: [String]
+        public let success: Bool
+        public let message: String
+        public let warnings: [String]
+        public let errors: [String]
         
         init (success: Bool, message: String, warnings: [String], errors: [String]){
             self.success = success
