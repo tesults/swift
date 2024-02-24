@@ -65,12 +65,13 @@ public struct Tesults {
         let credentials = AWSCredentials(
             accessKey:auth.AccessKeyId,
             secret: auth.SecretAccessKey,
-            expirationTimeout: auth.Expiration,
+            expirationTimeout: Date(timeIntervalSince1970: (auth.Expiration / 1000.0)),
             sessionToken: auth.SessionToken
         )
         do {
-            let credentialsProvider = try AWSCredentialsProvider.fromStatic(credentials)
-            let s3ClientConfiguration = try S3Client.S3ClientConfiguration(region: "us-east-1",credentialsProvider: credentialsProvider, endpointResolver: nil,  signingRegion: nil)
+            let credentialsProvider = try AWSClientRuntime.StaticCredentialsProvider(credentials)
+
+            let s3ClientConfiguration = try S3Client.S3ClientConfiguration(region: "us-east-1",credentialsProvider: credentialsProvider)
             let s3Client = S3Client(config: s3ClientConfiguration)
             return s3Client
         }
@@ -89,7 +90,7 @@ public struct Tesults {
         }
     }
     
-    let expireBuffer = 30; // 30 seconds
+    let expireBuffer = 30.0; // 30 seconds
     let maxActiveUploads = 10; // Upload at most 10 files simulataneously to avoid hogging the client machine.
     
     func filesUpload (files: inout [CaseFile], key: String, auth: Auth, target : String, warnings: inout [String], uploading: inout Int, filesUploaded: inout Int, bytesUploaded: inout UInt64) async ->  FilesUploadResult {
@@ -100,7 +101,7 @@ public struct Tesults {
             let expiration = auth.Expiration
             // Check if new credentials required.
             let now = Date().timeIntervalSince1970
-            if (Int(now) + expireBuffer > expiration) { // Check within 30 seconds
+            if (now + expireBuffer > expiration) { // Check within 30 seconds
             //of expiry.
                 // Refresh credentials
                 let credentialsRequest = CredentialsRequest(target: target, key: key)
@@ -131,8 +132,8 @@ public struct Tesults {
                             let name = URL(fileURLWithPath: caseFile.file).lastPathComponent
                             let uploadPath = "\(key)/\(caseFile.num)/\(name)"
                             let fileUrl = URL(fileURLWithPath: caseFile.file)
-                            let fileData = try Data(contentsOf: fileUrl)
-                            let dataStream = ByteStream.from(data: fileData)
+                            let fileHandle = try FileHandle(forReadingFrom: fileUrl)
+                            let dataStream = ByteStream.from(fileHandle: fileHandle)
                             let input = PutObjectInput(
                                 body: dataStream,
                                 bucket: "tesults-results",
@@ -245,7 +246,7 @@ public struct Tesults {
     
     struct Auth : Decodable {
         let AccessKeyId: String
-        let Expiration: UInt64
+        let Expiration: Double
         let SecretAccessKey: String
         let SessionToken: String
     }

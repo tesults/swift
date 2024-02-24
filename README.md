@@ -15,7 +15,7 @@ Contact help@tesults.com for support.
 
 MIT
 
-Copyright (c) 2022 Tesults
+Copyright (c) 2024 Tesults
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
